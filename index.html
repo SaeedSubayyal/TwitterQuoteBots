@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+</head>
+<body>
+<div class="container">
+    <div class="inner">
+        <div class="box">
+            <p class="number">
+                <img
+                    src="logo.png"
+                    alt="Twitter"
+                    title="TweetMe"
+                    id="tweet"
+                />
+            </p>
+            <div class="text">
+                <i class="start-quotes fas fa-quote-left"></i>
+                <p id="quotes"></p>
+                <p id="author" class="author"></p>
+            </div>
+            <label class="button">
+                <button id="newQ">New Quotes</button>
+                <button id="tweetMe">Tweet</button>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+    let realData = [];
+    const quotes = document.getElementById("quotes");
+    const author = document.getElementById("author");
+    const newQ = document.getElementById("newQ");
+    const tweetMe = document.getElementById("tweetMe");
+
+    const getNewQuotes = () => {
+        let rnum = Math.floor(Math.random() * 10);
+        quotes.innerText = `${realData[rnum].text}`;
+        author.innerText = `${realData[rnum].author}`;
+    }
+
+    const getQuotes = async () => {
+        const api = "https://type.fit/api/quotes";
+        try {
+            let data = await fetch(api);
+            realData = await data.json();
+            getNewQuotes();
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const TwitterNow = () => {
+        let rnum = Math.floor(Math.random() * 10);
+        const text = encodeURIComponent(realData[rnum].text);
+        const twitterapi = `https://twitter.com/intent/tweet?text=${text}`;
+        window.open(twitterapi);
+    }
+
+    tweetMe.addEventListener("click", TwitterNow);
+    newQ.addEventListener("click", getNewQuotes);
+    getQuotes();
+</script>
+</body>
+</html>
